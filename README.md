@@ -33,7 +33,7 @@ Then, just copy `pandoc-inline-headers.py` (mind to keep the `.py` suffix!) to a
 
 #### 2.1.1. YAML Configuration Variables
 
-```
+```yaml
 ---
 numberSections: true
 linkReferences: true
