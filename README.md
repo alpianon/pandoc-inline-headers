@@ -158,7 +158,7 @@ Style for inline headers.
 
 **default value:** 'emph'
 
-### 2.2.3 inlineHeaderNumStyle
+#### 2.2.3 inlineHeaderNumStyle
 
 Style for inline header numbers. Used only if you use also pandoc-crossref, and only if you set a different value for `secHeaderDelim` and for `chapDelim` (for instance, if `chapDelim` is set to the default value `.`, you have to set `secHeaderDelim` to, for example, `.&nbsp;` or `.&#9;` as suggested above)
 
@@ -166,7 +166,7 @@ Style for inline header numbers. Used only if you use also pandoc-crossref, and 
 
 **default value:** 'plain'
 
-### 2.2.4 inlineHeaderParStyle, inlineHeaderParStyleStart
+#### 2.2.4 inlineHeaderParStyle, inlineHeaderParStyleStart
 
 Base name and suffix for the custom paragraph styles used in conversion to docx and odt.
 Style names will be generated as follows:
