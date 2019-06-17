@@ -8,11 +8,11 @@ Inline header delimiters, as well as inline numbering and header styles, can be 
 
 Here is an example of the filter in action with html preview:
 
-![](example/img/inline-headers-screenshot.png)
+![](examples/img/inline-headers-screenshot.png)
 
 and here is an example of conversion of the same example text to odt:
 
-![](example/img/inline-headers-odt-screenshot.png)
+![](examples/img/inline-headers-odt-screenshot.png)
 
 ## 1. Installation
 
