@@ -78,7 +78,7 @@ I'm a section without header
 
 #### 2.1.3. Markdown Preview in Editor
 
-If you use an editor with embedded markdown preview rendered with pandoc, you should choose a markdown preview plugin that does not modify the markdown code before passing it to pandoc (like f.e. markdown-preview-plus for Atom), otherwise you may get wrong or misleading output.
+If you use an editor with embedded markdown preview rendered with pandoc, you should choose a markdown preview plugin that does not modify the markdown code before passing it to pandoc (f.e. markdown-preview-plus for Atom works correctly with pandoc-inline-headers), otherwise you may get wrong or misleading output.
 
 Unfortunately, one of the most widely used markdown preview packages for Atom, [markdown-preview-enhanced](https://github.com/shd101wyy/markdown-preview-enhanced), does not work well with pandoc-inline-headers (since it pre-processes markdown before sending it to pandoc), but I made some changes to a sub-component that should solve all the problems, and I am confident that my [pull request](https://github.com/shd101wyy/mume/pull/136) will be taken into consideration soon :)
 
