@@ -49,6 +49,8 @@ The last variable is the one that 'activates' `inline-section-headers`. It means
 
 Of course you can choose level 3, 4, etc. as inlineHeaderLevel. Instead, putting values below 2 will not produce any effect -- so first level headers cannot be rendered as inline headers (this feature may be added in the future).
 
+And, of course, you can use different values for `pandoc-crossref` variables (you should refer to its [documentation])((http://lierdakil.github.io/pandoc-crossref/)): the values shown above are just an example of a typical usage of `pandoc-inline-headers` together with `pandoc-crossref`.
+
 #### 2.1.2. Markdown Syntax
 
 Just write your markdown documents as usual, keeping in mind that all headers, whose level is equal to or greater than the `inlineHeaderLevel` variable, will be rendered as inline headers.
