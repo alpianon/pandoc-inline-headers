@@ -102,10 +102,11 @@ To convert to docx you have to do first:
 ```
 pandoc -t docx \
   --filter=pandoc-crossref --filter=pandoc-inline-headers.py \
-  --o example.docx example.md
+  --o example.docx -p example.md
 ```
+(Please note the `-p` (or `--preserve-tabs`) option, needed if you need tabs in your output document)
 
-then edit `example.docx` and change the custom paragraph styles created by the filter, that are named 'Customlist 1 start', 'Customlist 1', 'Customlist 2 start', 'Customlist 2', and so on (styles with 'start' at the end of the name are applied to the first paragraph of a section; styles without 'start' are applied to the following paragraphs).
+Then you should edit `example.docx` and change the custom paragraph styles created by the filter, that are named 'Customlist 1 start', 'Customlist 1', 'Customlist 2 start', 'Customlist 2', and so on (styles with 'start' at the end of the name are applied to the first paragraph of a section; styles without 'start' are applied to the following paragraphs).
 
 You may use appropriate tab values in paragraph styles, that, together with the section header number delimiter suggested above (period followed by tab, or `.&#9;`) may lead to nice results like in the example images at the beggining of this README.
 
@@ -116,8 +117,6 @@ pandoc -t docx \
   --filter=pandoc-crossref --filter=pandoc-inline-headers.py \
   --reference-doc=example_model.docx --o example.docx -p example.md
 ```
-
-Please note the `-p` (or `--preserve-tabs`) option, needed if you need tabs in your output document.
 
 ##### c) odt
 
