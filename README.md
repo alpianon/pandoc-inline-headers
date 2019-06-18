@@ -18,7 +18,7 @@ and here is an example of conversion of the same example text to odt:
 
 ### 1.1. Mandatory
 
-Pandoc-inline-header requires [Pandoc](https://github.com/jgm/pandoc/releases) and [Panflute](http://scorreia.com/software/panflute/). Assuming that you have already installed Pandoc, in order to install Panflute, just do `sudo pip3 install panflute` (or, if you want to install as user, `pip3 install --user panflute` -- but then check if your PATH contains also your user installation directory).
+Pandoc-inline-header requires [Pandoc](https://github.com/jgm/pandoc/releases) and [Panflute](http://scorreia.com/software/panflute/). Assuming that you have already installed Pandoc, in order to install Panflute, just do `sudo pip3 install panflute` (or, if you want to install as user, `pip3 install --user panflute` -- but then check if your PATH contains also your user installation directory). **Note**: pip and pip3 are two different applications; pip3 is for python 3.x and it is the one you need.
 
 Then, just copy `pandoc-inline-headers.py` (mind to keep the `.py` suffix!) to a directory included in your PATH (like `usr/local/bin` or the like), and make sure it is executable (`sudo chmod +x /usr/local/bin/pandoc-inline-headers.py`).
 
