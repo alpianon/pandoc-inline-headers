@@ -196,7 +196,7 @@ Customlist 3
 
 etc.
 ```
-**default values:** 'Customlist'  'start'
+*default values:* 'Customlist'  'start'
 
 #### 2.2.2. Ordered lists
 
