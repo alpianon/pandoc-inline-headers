@@ -76,7 +76,7 @@ def create_elem(text, style):
     return elem
 
 
-def create_inlineheader(elem, doc, parms):
+def create_inlineheader(elem, doc, parms, delim=True):
     '''transform the header to an inline header, applying the emphasis
     (italic) or strong (bold) style, depending on the parameters
     '''
@@ -99,7 +99,7 @@ def create_inlineheader(elem, doc, parms):
         sec_number = s[0]+secHeaderDelim
         sec_title = secHeaderDelim.join(s[1:])
 
-        if sec_title:
+        if sec_title and delim:
             sec_title += inlineHeaderDelim
         sec_number_elem = get_style_elem(inlineHeaderNumStyle)
         sec_number_elem.content.append(pf.Str(sec_number))
@@ -195,9 +195,12 @@ def action(elem, doc):
             elif elem.level <= parent_level:
                 break
             elem = skip_comments(elem)
-            if elem and isinstance(elem.next, pf.Para):
-                inline_header_level = elem.level
-                inline_header_identifier = elem.identifier
+            if not elem:
+                break
+
+            inline_header_level = elem.level
+            inline_header_identifier = elem.identifier
+            if isinstance(elem.next, pf.Para):
                 inline_header = create_inlineheader(elem, doc, parms)
                 elem = skip_comments(elem)
                 elem = process_next(
@@ -216,9 +219,21 @@ def action(elem, doc):
                     elem = process_next(
                         elem, parms, parent_level, inline_header_level
                     )
-            else:
-                if elem:
-                    elem = elem.next
+            else: # replace only header
+                inline_header = create_inlineheader(elem,doc,parms,delim=False)
+                newDiv = pf.Div(pf.Para(inline_header),
+                    attributes={'custom-style': '{} {}{}'.format(
+                        parms['inlineHeaderParStyle'],
+                        inline_header_level - parent_level,
+                        ' header'
+                    )},
+                    identifier=inline_header_identifier
+                )
+                elem.parent.content.insert(elem.index+1, newDiv)
+                elem = elem.next
+                elem.parent.content.pop(elem.index-1)
+                elem = elem.next
+
 
 
 def prepare(doc):
