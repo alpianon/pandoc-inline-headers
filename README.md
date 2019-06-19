@@ -18,7 +18,7 @@ and here is an example of conversion of the same example text to odt:
 
 ### 1.1. Mandatory
 
-Pandoc-inline-header requires [Pandoc](https://github.com/jgm/pandoc/releases) and [Panflute](http://scorreia.com/software/panflute/). Assuming that you have already installed Pandoc, in order to install Panflute, just do `sudo pip3 install panflute` (or, if you want to install as user, `pip3 install --user panflute` -- but then check if your PATH contains also your user installation directory).
+Pandoc-inline-header requires [Pandoc](https://github.com/jgm/pandoc/releases) and [Panflute](http://scorreia.com/software/panflute/). Assuming that you have already installed Pandoc, in order to install Panflute, just do `sudo pip3 install panflute` (or, if you want to install as user, `pip3 install --user panflute` -- but then check if your PATH contains also your user installation directory). **Note**: pip and pip3 are two different applications; pip3 is for python 3.x and it is the one you need to use to install panflute (panflute has unicode issues when installed with pip and python 2.7).
 
 Then, just copy `pandoc-inline-headers.py` (mind to keep the `.py` suffix!) to a directory included in your PATH (like `usr/local/bin` or the like), and make sure it is executable (`sudo chmod +x /usr/local/bin/pandoc-inline-headers.py`).
 
@@ -48,6 +48,8 @@ The first four variables are relative to the `pandoc-crossref` filter: we activa
 The last variable is the one that 'activates' `inline-section-headers`. It means that all headers, whose level is 2 or higher, will be rendered as inline headers.
 
 Of course you can choose level 3, 4, etc. as inlineHeaderLevel. Instead, putting values below 2 will not produce any effect -- so first level headers cannot be rendered as inline headers (this feature may be added in the future).
+
+And, of course, you can use different values for `pandoc-crossref` variables (you should refer to its [documentation](http://lierdakil.github.io/pandoc-crossref/)): the values shown above are just an example of a typical usage of `pandoc-inline-headers` together with `pandoc-crossref`.
 
 #### 2.1.2. Markdown Syntax
 
@@ -102,10 +104,11 @@ To convert to docx you have to do first:
 ```
 pandoc -t docx \
   --filter=pandoc-crossref --filter=pandoc-inline-headers.py \
-  --o example.docx example.md
+  --o example.docx -p example.md
 ```
+(Please note the `-p` (or `--preserve-tabs`) option, needed if you need tabs in your output document)
 
-then edit `example.docx` and change the custom paragraph styles created by the filter, that are named 'Customlist 1 start', 'Customlist 1', 'Customlist 2 start', 'Customlist 2', and so on (styles with 'start' at the end of the name are applied to the first paragraph of a section; styles without 'start' are applied to the following paragraphs).
+Then you should edit `example.docx` and change the custom paragraph styles created by the filter, that are named 'Customlist 1 start', 'Customlist 1', 'Customlist 2 start', 'Customlist 2', and so on (styles with 'start' at the end of the name are applied to the first paragraph of a section; styles without 'start' are applied to the following paragraphs).
 
 You may use appropriate tab values in paragraph styles, that, together with the section header number delimiter suggested above (period followed by tab, or `.&#9;`) may lead to nice results like in the example images at the beggining of this README.
 
@@ -116,8 +119,6 @@ pandoc -t docx \
   --filter=pandoc-crossref --filter=pandoc-inline-headers.py \
   --reference-doc=example_model.docx --o example.docx -p example.md
 ```
-
-Please note the `-p` (or `--preserve-tabs`) option, needed if you need tabs in your output document.
 
 ##### c) odt
 
