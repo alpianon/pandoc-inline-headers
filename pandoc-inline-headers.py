@@ -82,6 +82,7 @@ def create_inlineheader(elem, doc, parms):
     '''
     secHeaderDelim = doc.get_metadata('secHeaderDelim')
     numberSections = doc.get_metadata('numberSections')
+    sectionsDepth = int(doc.get_metadata('sectionsDepth'))
     chapDelim = doc.get_metadata('chapDelim')
     inlineHeaderStyle = parms['inlineHeaderStyle']
     inlineHeaderNumStyle = parms['inlineHeaderNumStyle']
@@ -100,7 +101,6 @@ def create_inlineheader(elem, doc, parms):
 
         if sec_title:
             sec_title += inlineHeaderDelim
-        #sec_number_elem = create_elem(sec_number, inlineHeaderNumStyle)
         sec_number_elem = get_style_elem(inlineHeaderNumStyle)
         sec_number_elem.content.append(pf.Str(sec_number))
         sec_title_elem = create_elem(sec_title, inlineHeaderStyle)
@@ -115,9 +115,11 @@ def create_inlineheader(elem, doc, parms):
         for e in elem.content:
             inline_header.content.append(e)
         if inline_header.content:
-        #if not header_str.endswith(secHeaderDelim):
-            inline_header.content.append(pf.Str(inlineHeaderDelim))
-            inline_header.content.append(pf.Space())
+            if sectionsDepth == -1 or elem.level <= sectionsDepth:
+                inline_header.content.append(pf.Str(inlineHeaderDelim))
+                inline_header.content.append(pf.Space())
+            else:
+                inline_header.content.append(pf.Str(secHeaderDelim))
 
     return inline_header
 
@@ -154,7 +156,7 @@ def process_next(
         new.content.append(e)
     if inline_header:
         style_suffix = ' '+parms['inlineHeaderParStyleStart']
-    elif NewClass == pf.OrderedList:
+    elif NewClass == pf.OrderedList: # TODO: keep it for when the pandoc issue will be resolved
         style_suffix = ' list'
     else:
         style_suffix = ''
