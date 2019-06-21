@@ -205,7 +205,7 @@ pandoc -p -t odt \
 	--filter=pandoc-crossref \
 	--filter=pandoc-inline-headers.py \
   --lua-filter=odt-custom-styles.lua \
-	--reference-doc=test_model.odt
+	--reference-doc=test_model.odt \
   --o test.odt -p test.md
 ```
 
