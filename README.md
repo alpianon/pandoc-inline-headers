@@ -6,7 +6,7 @@ Even if it can used as the only pandoc filter, it is intended to be used in casc
 
 Inline header delimiters, as well as inline numbering and header styles, can be customized globally and/or for a specific chapter.
 
-**NEW:** With the additional crossref-ordered-list filter (used in cascade *before* pandoc-crossref) if can handle also markdown ordered lists, converting them into "native" pandoc-crossref ordered lists, that can be referenced by adding the item's number or letter to section identifier (like `@sec:mysection:a`).
+**NEW:** With the additional crossref-ordered-list filter (used in cascade *before* pandoc-crossref), it can handle also markdown ordered lists, converting them into "native" pandoc-crossref ordered lists, that can be referenced by adding the item's number or letter to section identifier (like `@sec:mysection:a`).
 
 Here is an example of the filter in action with html preview:
 
