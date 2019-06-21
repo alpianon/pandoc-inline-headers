@@ -47,12 +47,7 @@ def action(elem, doc):
     global curlevel, curid
     numberSections = doc.get_metadata('numberSections')
     sectionsDepth = doc.get_metadata('sectionsDepth')
-    if not sectionsDepth:
-        sectionsDepth = 0
-    elif int(sectionsDepth) == "-1":
-        sectionsDepth = 100000000
-    else:
-        sectionsDepth = int(sectionsDepth)
+    sectionsDepth = int(sectionsDepth) if sectionsDepth else 0
     if not numberSections:
         return None
     if isinstance(elem, pf.Header):
@@ -66,7 +61,11 @@ def action(elem, doc):
             elem.parent.content.insert(
                 elem.index+1,
                 pf.Header(
-                    pf.Str(number) if curlevel >= sectionsDepth else pf.Str(""),
+                    (
+                        pf.Str(number)
+                        if (curlevel >= sectionsDepth and sectionsDepth != -1)
+                        else pf.Str("")
+                    ),
                     level=curlevel+1,
                     identifier=curid+":"+number,
                     attributes={'label': number},
