@@ -55,6 +55,8 @@ def action(elem, doc):
         curid = elem.identifier
     elif isinstance(elem, pf.OrderedList):
         ordered_list = elem
+        if ordered_list.style not in [style for style in number_formats]:
+            return None
         format_number = number_formats[ordered_list.style]
         for idx, list_item in enumerate(ordered_list.content):
             number = format_number(idx+1)
