@@ -6,6 +6,8 @@ Even if it can used as the only pandoc filter, it is intended to be used in casc
 
 Inline header delimiters, as well as inline numbering and header styles, can be customized globally and/or for a specific chapter.
 
+**NEW:** With the additional crossref-ordered-list filter (used in cascade *before* pandoc-crossref) if can handle also markdown ordered lists, converting them into "native" pandoc-crossref ordered lists, that can be referenced by adding the item's number or letter to section identifier (like `@sec:mysection:a`).
+
 Here is an example of the filter in action with html preview:
 
 ![](examples/img/inline-headers-screenshot.png)
@@ -20,12 +22,12 @@ and here is an example of conversion of the same example text to odt:
 
 Pandoc-inline-header requires [Pandoc](https://github.com/jgm/pandoc/releases) and [Panflute](http://scorreia.com/software/panflute/). Assuming that you have already installed Pandoc, in order to install Panflute, just do `sudo pip3 install panflute` (or, if you want to install as user, `pip3 install --user panflute` -- but then check if your PATH contains also your user installation directory). **Note**: pip and pip3 are two different applications; pip3 is for python 3.x and it is the one you need to use to install panflute (panflute has unicode issues when installed with pip and python 2.7).
 
-Then, just copy `pandoc-inline-headers.py` (mind to keep the `.py` suffix!) to a directory included in your PATH (like `usr/local/bin` or the like), and make sure it is executable (`sudo chmod +x /usr/local/bin/pandoc-inline-headers.py`).
+Then, just copy `pandoc-inline-headers.py` and `crossref-ordered-list.py` (mind to keep the `.py` suffix!) to a directory included in your PATH (like `usr/local/bin` or the like), and make sure they are executable (`sudo chmod +x /usr/local/bin/pandoc-inline-headers.py && sudo chmod +x /usr/local/bin/crossref-ordered-list.py`).
 
 ### 1.2. Recommended
 
 1. [Pandoc-crossref](http://lierdakil.github.io/pandoc-crossref/) is not necessary but highly recommended. To install it, you may just download the latest release file from the corresponding [github page](https://github.com/lierdakil/pandoc-crossref/releases), and install the `pandoc-crossref` binary to a directory included in your PATH (like `usr/local/bin` or the like).
-2. Moreover, if you want to convert to odt, you need also a patched version odt-custom-styles lua filter by [jzeneto](https://github.com/jzeneto/) -- see my pull request [here](https://github.com/jzeneto/pandoc-odt-filters/pull/3). You have to download both [odt-custom-styles.lua](https://raw.githubusercontent.com/alpianon/pandoc-odt-filters/master/odt-custom-styles.lua) and [util.lua](https://raw.githubusercontent.com/alpianon/pandoc-odt-filters/master/util.lua) and put them in your lua filters directory (tipically, `~/.pandoc/filters/`).
+2. Moreover, if you want to convert to odt, you need also a patched version odt-custom-styles lua filter by [jzeneto](https://github.com/jzeneto/) -- see my pull request [here](https://github.com/jzeneto/pandoc-odt-filters/pull/3). You have to download both [odt-custom-styles.lua](https://raw.githubusercontent.com/alpianon/pandoc-odt-filters/preserve-tabs-patch/odt-custom-styles.lua) and [util.lua](https://raw.githubusercontent.com/alpianon/pandoc-odt-filters/master/util.lua) and put them in your lua filters directory (tipically, `~/.pandoc/filters/`).
 
 ## 2. Usage
 
@@ -37,13 +39,13 @@ Then, just copy `pandoc-inline-headers.py` (mind to keep the `.py` suffix!) to a
 ---
 numberSections: true
 linkReferences: true
-sectionsDepth: -1
+sectionsDepth: 3
 secHeaderDelim: ".&#9;"
 inlineHeaderLevel: 2
 ---
 ```
 
-The first four variables are relative to the `pandoc-crossref` filter: we activate section numbering, automatic creation of reference links, unlimited section depth, and a section header number delimiter (period followed by tab) that will be useful when converting to docx or odt formats (note that the 'tab' character must be written as the corresponding html character code -- `&#9;` -- otherwise it is ignored by `pandoc-crossref`).
+The first four variables are relative to the `pandoc-crossref` filter: we activate section numbering, automatic creation of reference links, third level section depth, and a section header number delimiter (period followed by tab) that will be useful when converting to docx or odt formats (note that the 'tab' character must be written as the corresponding html character code -- `&#9;` -- otherwise it is ignored by `pandoc-crossref`).
 
 The last variable is the one that 'activates' `inline-section-headers`. It means that all headers, whose level is 2 or higher, will be rendered as inline headers.
 
@@ -78,23 +80,84 @@ even if in such cases it is recommended to put a unique section identifier:
 I'm a section without header
 ```
 
+<span id=ordered_lists>As for ordered lists</span>, if you use crossref-ordered-list filter *before* pandoc-crossref and pandoc-inline-headers, they can be rendered and referenced through pandoc-crossref.
+
+Here is an example of the code (please note the use of `sectionsDepth` to choose at which level ordered list numbers/letters have to be rendered without the parent section number(s) - i.e. `a. item` instead of `1.1.a. item` - and note that, when refencing ordered list items, parent section numbers are always included, regardless of the `sectionsDepth` value, as it should be):
+
+```markdown
+---
+numberSections: true
+sectionsDepth: 2
+secHeaderDelim: ".&#9;"
+inlineHeaderLevel: 2
+---
+
+# Main Section Z
+
+dummy text
+
+## Subsection X {#sec:h2}
+
+dummy text
+
+a. dummy text
+b. dummy text
+
+## Subsection Y
+
+ref to @sec:h2:b
+
+# Main Section W
+
+dummy text
+
+i) dummy text
+ii) dummy text
+```
+
+and here is the corresponding output:
+
+>**1.	Main Section Z**
+>
+>dummy text
+>
+>1.1.	*Subsection X.* dummy text
+>
+>a.	dummy text
+>b.	dummy text
+>
+>*1.2. Subsection Y.* ref to sec. 1.1.b
+>
+>**2. Main Section W**
+>
+>dummy text
+>
+>2.i.	dummy text
+>
+>2.ii.	dummy text
+
 #### 2.1.3. Markdown Preview in Editor
 
-If you use an editor with embedded markdown preview rendered with pandoc, you should choose a markdown preview plugin that does not modify the markdown code before passing it to pandoc, otherwise you may get wrong or misleading output. F.e. markdown-preview-plus for Atom seem to work correctly with pandoc-inline-headers.
+If you use a markdown preview plugin in your favourite text editor, you should include the three filters `crossref-ordered-list.py`, `pandoc-crossref` and `pandoc-inline-headers.py` (in this precise order) in pandoc rendering settings.
+
+You should choose a markdown preview plugin that does not modify the markdown code before passing it to pandoc, otherwise you may get wrong or misleading output. F.e. markdown-preview-plus for Atom seem to work correctly with pandoc-inline-headers.
 
 Unfortunately, one of the most widely used markdown preview packages for Atom, [markdown-preview-enhanced](https://github.com/shd101wyy/markdown-preview-enhanced), does not work well with pandoc-inline-headers (since it pre-processes markdown before sending it to pandoc), but I made some changes to a sub-component that should solve all the problems, and I am confident that my [pull request](https://github.com/shd101wyy/mume/pull/136) will be taken into consideration soon :)
 
 #### 2.1.4. Converting to html, docx, odt
 
-Pandoc-inline-headers must be used in cascade after `pandoc-crossref` (and before `odt-custom-styles.lua`, when converting to odt).
+Pandoc-inline-headers must be used in cascade after `pandoc-crossref` (and before `odt-custom-styles.lua`, when converting to odt), while crossref-ordered-list must be put before it.
 
 ##### a) HTML
 
 A typical command to convert to html would be:
 
 ```
-pandoc -t html --filter=pandoc-crossref --filter=pandoc-inline-headers.py \
---o example.html example.md
+pandoc -p -t html \
+  --filter=crossref-ordered-list.py \
+  --filter=pandoc-crossref \
+	--filter=pandoc-inline-headers.py \
+  --o test.html test.md
 ```
 
 ##### b) docx
@@ -102,31 +165,29 @@ pandoc -t html --filter=pandoc-crossref --filter=pandoc-inline-headers.py \
 To convert to docx you have to do first:
 
 ```
-pandoc -t docx \
-  --filter=pandoc-crossref --filter=pandoc-inline-headers.py \
-  --o example.docx -p example.md
+pandoc -p -t docx \
+  --filter=crossref-ordered-list.py \
+	--filter=pandoc-crossref \
+	--filter=pandoc-inline-headers.py \
+  --o test.docx -p test.md
 ```
-(Please note the `-p` (or `--preserve-tabs`) option, needed if you need tabs in your output document)
+
+>Please note the `-p` (or `--preserve-tabs`) option, needed if you need tabs in your output document
 
 Then you should edit `example.docx` and change the custom paragraph styles created by the filter, that are named 'Customlist 1 start', 'Customlist 1', 'Customlist 2 start', 'Customlist 2', and so on (styles with 'start' at the end of the name are applied to the first paragraph of a section; styles without 'start' are applied to the following paragraphs).
 
 You may use appropriate tab values in paragraph styles, that, together with the section header number delimiter suggested above (period followed by tab, or `.&#9;`) may lead to nice results like in the example images at the beggining of this README.
 
-When you are satisfied of your model, just save it (say, as `example_model.docx`) and use it in your pandoc command:
+When you are satisfied of your model, just save it (say, as `test_model.docx`) and use it in your pandoc command:
 
 ```
-pandoc -t docx \
-  --filter=pandoc-crossref --filter=pandoc-inline-headers.py \
-  --reference-doc=example_model.docx --o example.docx -p example.md
+pandoc -p -t docx \
+  --filter=crossref-ordered-list.py \
+	--filter=pandoc-crossref \
+	--filter=pandoc-inline-headers.py \
+	--reference-doc=test_model.docx \
+  --o test.docx -p test.md
 ```
-
-&nbsp;
-
-><span style="color:red;">**IMPORTANT NOTE ABOUT ORDERED LISTS**</span>
->
->As for ordered lists (like `a) ... b) ...`), you may use them between one paragraph and another, but please keep in mind that, **because of a [pandoc bug/issue](https://github.com/jgm/pandoc/issues/4697), they cannot be rendered in odt or in docx conversion** with a custom *list* style, but only with a custom *paragraph* style -- but with ordered lists is of paragraph style customization is of little use, because, among other things, *paragraph* syle indents are overrided by *list* style indents.
->
-> In other words, you cannot customize standard ordered list styles in docx and odt; but you may find some indications on how to implement "native" pandoc-crossref ordered lists in the [Advanced Use section](#advanced) below, that may be styled with custom paragraph styes.
 
 &nbsp;
 
@@ -139,12 +200,16 @@ Converting to odt is a little bit more complicated, since pandoc does not suppor
 
 Afterwards, you will be able to convert to odt in this way:
 ```
-pandoc -t odt --filter=pandoc-crossref --filter=pandoc-inline-headers.py \
---lua-filter=odt-custom-styles.lua --reference-doc=example_model.odt \
--o example.odt -p example.md
+pandoc -p -t odt \
+  --filter=crossref-ordered-list.py \
+	--filter=pandoc-crossref \
+	--filter=pandoc-inline-headers.py \
+  --lua-filter=odt-custom-styles.lua \
+	--reference-doc=test_model.odt
+  --o test.odt -p test.md
 ```
 
-### 2.2. Advanced Use {#advanced}
+### 2.2. Advanced Use
 
 #### 2.2.1. Customization of inline header delimiters and styles
 
@@ -200,49 +265,6 @@ etc.
 
 #### 2.2.2. Ordered lists
 
-You may get "native" pandoc-crossref ordered lists by limiting sectionsDepth, and using labels in sections 'deeper' than sectionsDepth value. In this way, you can still use references to such sections, even if they are not explicitly numbered by pandoc-crossref.
+As for ordered lists (like `a) ... b) ...`), you may 'use' them even without the `crossref-ordered-list.py` filter, but please keep in mind that, **because of a [pandoc bug/issue](https://github.com/jgm/pandoc/issues/4697), they cannot be rendered in odt or in docx conversion** with a custom *list* style, but only with a custom *paragraph* style; but with ordered lists, paragraph style customization is of little use, because, among other things, *paragraph* syle indents are overrided by *list* style indents (so you will always get the indents set in the default list style, regardless of the level/indentation of the "parent" section).
 
-Example code (please note the use of section identifiers to avoid duplicate indentifiers automatically generated by pandoc):
-
-```markdown
----
-numberSections: true
-linkReferences: true
-sectionsDepth: 3
-secHeaderDelim: ".&#9;"
-inlineHeaderLevel: 2
----
-
-# Header 1
-
-text
-
-## Header 2
-
-Hi, refer to @sec:h3:a
-
-### Header 3
-
-#### a {#sec:h3:a label="a"}
-
-first option
-
-#### b {#sec:h3:b label="b"}
-
-second option
-
-```
-
-Outcome:
-
->**1.	Header 1**
->
->text
->
->1.1.	*Header 2*. Hi, refer to sec. <span style="text-decoration:underline">1.1.1.a</span>
->
->1.1.1.	*Header 3*
->
->a. first option
->
->b. second option
+In other words, you cannot customize standard ordered list styles in docx and odt; this is the reason why it is preferrable to render them as "native" pandoc-crossref lists (so you can even reference them, as explained in the [Basics section](#ordered-lists))
