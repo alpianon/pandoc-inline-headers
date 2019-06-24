@@ -333,22 +333,40 @@ to, for example, ``.&nbsp;`` or ``.&#9;`` as suggested above)
 
 **inlineHeaderParStyle, inlineHeaderParStyleStart**
 
-Base name and suffix for the custom paragraph styles used in conversion
-to docx and odt. Style names will be generated as follows:
+Pandoc uses two paragraphs: one at the beginning of the text, one for
+the follow-on paragraphs (usually, first paragraph, text body), to
+follow the convention that first paragraphs have no leading indent. The
+same happens with pandoc-inline-headers.py. Style names will be
+generated as follows: To override the standard default values, you can
+add one or both of these parameters. They will be rendered according to
+the following convention:
 
 ::
 
    {inlineHeaderParStyle} {level} {inlineHeaderParStyleStart}
    {inlineHeaderParStyle} {level}
 
-   Customlist 1 start
-   Customlist 1
-   Customlist 2 start
-   Customlist 2
-   Customlist 3 start
-   Customlist 3
+Therefore, The actual name of the styles, using
 
-   etc.
+::
+
+   {inlineHeaderParStyle="Mystyle" inlineHeaderParStyleStart="first"}
+
+will be, when converted:
+
+.. code:: md
+
+   # heading 1
+   Mystyle 1 first
+   Mystyle 1
+   ## Heading 2
+   Mystyle 2 first
+   Mystyle 2
+   ### Heading 3
+   Mystyle 3 first
+   Mystyle 3
+
+etc.
 
 *default values:* ‘Customlist’ ‘start’
 
@@ -367,7 +385,7 @@ things, *paragraph* syle indents are overrided by *list* style indents
 regardless of the level/indentation of the “parent” section).
 
 In other words, you cannot customize standard ordered list styles in
-docx and odt; this is the reason why it is preferrable to render them as
+docx and odt; this is the reason why it is preferable to render them as
 “native” pandoc-crossref lists (so you can even reference them, as
 explained in the `Basics section <#ordered-lists>`__)
 
