@@ -4,6 +4,9 @@ import panflute as pf
 
 import re
 
+from io import StringIO
+
+
 def upperRoman(number):
     roman_digit_map = [
         (1000, 'M'), (900, 'CM'), (500, 'D'), (400, 'CD'),
@@ -120,5 +123,19 @@ def action(elem, doc):
         while len(ordered_list.content) > 0: # delete ordered list
             ordered_list.content.pop(0)
 
+def prepare(doc):
+    if doc.get_metadata('crossrefYaml'):
+        with open(doc.get_metadata('crossrefYaml'), 'r') as f:
+            json = pf.convert_text(
+                "---\n{}\n---\n".format( f.read() ),
+                output_format="json"
+            )
+            crossrefDoc = pf.load(StringIO(json))
+            if crossrefDoc.metadata.content:
+                for key, value in crossrefDoc.metadata.content.items():
+                    if not doc.get_metadata(key): # do not override doc metadata
+                        doc.metadata[key] = value
+                return doc
+
 if __name__ == '__main__':
-    pf.toJSONFilter(action)
+    pf.toJSONFilter(action, prepare=prepare)
