@@ -114,7 +114,7 @@ A typical command to convert to html would be:
 pandoc -p -t html \
   --filter=crossref-ordered-list.py \
   --filter=pandoc-crossref \
-	--filter=pandoc-inline-headers.py \
+  --filter=pandoc-inline-headers.py \
   --o test.html test.md
 ```
 
@@ -125,8 +125,8 @@ To convert to docx you have to do first:
 ```
 pandoc -p -t docx \
   --filter=crossref-ordered-list.py \
-	--filter=pandoc-crossref \
-	--filter=pandoc-inline-headers.py \
+  --filter=pandoc-crossref \
+  --filter=pandoc-inline-headers.py \
   --o test.docx -p test.md
 ```
 
@@ -141,9 +141,9 @@ When you are satisfied of your model, just save it (say, as `test_model.docx`) a
 ```
 pandoc -p -t docx \
   --filter=crossref-ordered-list.py \
-	--filter=pandoc-crossref \
-	--filter=pandoc-inline-headers.py \
-	--reference-doc=test_model.docx \
+  --filter=pandoc-crossref \
+  --filter=pandoc-inline-headers.py \
+  --reference-doc=test_model.docx \
   --o test.docx -p test.md
 ```
 
@@ -160,10 +160,10 @@ Afterwards, you will be able to convert to odt in this way:
 ```
 pandoc -p -t odt \
   --filter=crossref-ordered-list.py \
-	--filter=pandoc-crossref \
-	--filter=pandoc-inline-headers.py \
+  --filter=pandoc-crossref \
+  --filter=pandoc-inline-headers.py \
   --lua-filter=odt-custom-styles.lua \
-	--reference-doc=test_model.odt \
+  --reference-doc=test_model.odt \
   --o test.odt -p test.md
 ```
 
