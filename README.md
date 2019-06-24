@@ -18,15 +18,25 @@ and here is an example of conversion of the same example text to odt:
 
 ## 1. Installation
 
-### 1.1. Mandatory
+### 1.1. Python Package
 
-Pandoc-inline-header requires [Pandoc](https://github.com/jgm/pandoc/releases) and [Panflute](http://scorreia.com/software/panflute/). Assuming that you have already installed Pandoc, in order to install Panflute, just do `sudo pip3 install panflute` (or, if you want to install as user, `pip3 install --user panflute` -- but then check if your PATH contains also your user installation directory). **Note**: pip and pip3 are two different applications; pip3 is for python 3.x and it is the one you need to use to install panflute (panflute has unicode issues when installed with pip and python 2.7).
+```bash
+sudo pip3 install pandoc-inline-headers
+```
 
-Then, just copy `pandoc-inline-headers.py` and `crossref-ordered-list.py` (mind to keep the `.py` suffix!) to a directory included in your PATH (like `usr/local/bin` or the like), and make sure they are executable (`sudo chmod +x /usr/local/bin/pandoc-inline-headers.py && sudo chmod +x /usr/local/bin/crossref-ordered-list.py`).
+or, if you want to install as user:
 
-### 1.2. Recommended
+```bash
+pip3 install --user pandoc-inline-headers
+```
 
-1. [Pandoc-crossref](http://lierdakil.github.io/pandoc-crossref/) is not necessary but highly recommended. To install it, you may just download the latest release file from the corresponding [github page](https://github.com/lierdakil/pandoc-crossref/releases), and install the `pandoc-crossref` binary to a directory included in your PATH (like `usr/local/bin` or the like).
+but then check if your PATH contains also your user installation directory).
+
+**Note**: pip and pip3 are two different applications; pip3 is for python 3.x and it is the one you need to use to install this package.
+
+### 1.2. (Highly) Recommended Pandoc Filters
+
+1. [Pandoc-crossref](http://lierdakil.github.io/pandoc-crossref/) is not necessary but **highly recommended**, because **without it, you cannot exploit all the features of pandoc-inline-headers**. To install it, you may just download the latest release file from the corresponding [github page](https://github.com/lierdakil/pandoc-crossref/releases), and install the `pandoc-crossref` binary to a directory included in your PATH (like `usr/local/bin` or the like).
 2. Moreover, if you want to convert to odt, you need also a patched version odt-custom-styles lua filter by [jzeneto](https://github.com/jzeneto/) -- see my pull request [here](https://github.com/jzeneto/pandoc-odt-filters/pull/3). You have to download both [odt-custom-styles.lua](https://raw.githubusercontent.com/alpianon/pandoc-odt-filters/preserve-tabs-patch/odt-custom-styles.lua) and [util.lua](https://raw.githubusercontent.com/alpianon/pandoc-odt-filters/master/util.lua) and put them in your lua filters directory (tipically, `~/.pandoc/filters/`).
 
 ## 2. Usage
@@ -62,6 +72,7 @@ Section identifiers (like `{#sec:my_section}`) will be kept, and cross-reference
 Comments within the text or between section header and section text (like `<!-- comment -->`) are kept but ignored.
 
 You can use also empty headers, like:
+
 ```markdown
 ###
 
@@ -96,11 +107,11 @@ Please note the use of `sectionsDepth` to choose at which level ordered list num
 
 #### 2.1.3. Markdown Preview in Editor
 
-If you use a markdown preview plugin in your favourite text editor, you should include the three filters `crossref-ordered-list.py`, `pandoc-crossref` and `pandoc-inline-headers.py` (in this precise order) in pandoc rendering settings.
+If you use a markdown preview plugin in your favourite text editor, you should include the three filters `crossref-ordered-list`, `pandoc-crossref` and `pandoc-inline-headers` (in this precise order) in pandoc rendering settings.
 
 You should choose a markdown preview plugin that does not modify the markdown code before passing it to pandoc, otherwise you may get wrong or misleading output. F.e. markdown-preview-plus for Atom seem to work correctly with pandoc-inline-headers.
 
-Unfortunately, one of the most widely used markdown preview packages for Atom, [markdown-preview-enhanced](https://github.com/shd101wyy/markdown-preview-enhanced), does not work well with pandoc-inline-headers (since it pre-processes markdown before sending it to pandoc), but I made some changes to a sub-component that should solve all the problems, and I am confident that my [pull request](https://github.com/shd101wyy/mume/pull/136) will be taken into consideration soon :)
+You can also use [markdown-preview-enhanced](https://github.com/shd101wyy/markdown-preview-enhanced), that **since version 0.16.2** works well with pandoc-inline-headers.
 
 #### 2.1.4. Converting to html, docx, odt
 
@@ -112,9 +123,9 @@ A typical command to convert to html would be:
 
 ```
 pandoc -p -t html \
-  --filter=crossref-ordered-list.py \
+  --filter=crossref-ordered-list \
   --filter=pandoc-crossref \
-  --filter=pandoc-inline-headers.py \
+  --filter=pandoc-inline-headers \
   --o test.html test.md
 ```
 
@@ -124,9 +135,9 @@ To convert to docx you have to do first:
 
 ```
 pandoc -p -t docx \
-  --filter=crossref-ordered-list.py \
+  --filter=crossref-ordered-list \
   --filter=pandoc-crossref \
-  --filter=pandoc-inline-headers.py \
+  --filter=pandoc-inline-headers \
   --o test.docx -p test.md
 ```
 
@@ -140,9 +151,9 @@ When you are satisfied of your model, just save it (say, as `test_model.docx`) a
 
 ```
 pandoc -p -t docx \
-  --filter=crossref-ordered-list.py \
+  --filter=crossref-ordered-list \
   --filter=pandoc-crossref \
-  --filter=pandoc-inline-headers.py \
+  --filter=pandoc-inline-headers \
   --reference-doc=test_model.docx \
   --o test.docx -p test.md
 ```
@@ -159,9 +170,9 @@ Converting to odt is a little bit more complicated, since pandoc does not suppor
 Afterwards, you will be able to convert to odt in this way:
 ```
 pandoc -p -t odt \
-  --filter=crossref-ordered-list.py \
+  --filter=crossref-ordered-list \
   --filter=pandoc-crossref \
-  --filter=pandoc-inline-headers.py \
+  --filter=pandoc-inline-headers \
   --lua-filter=odt-custom-styles.lua \
   --reference-doc=test_model.odt \
   --o test.odt -p test.md
@@ -223,6 +234,6 @@ etc.
 
 #### 2.2.2. Ordered lists
 
-As for ordered lists (like `a) ... b) ...`), you may 'use' them even without the `crossref-ordered-list.py` filter, but please keep in mind that, **because of a [pandoc bug/issue](https://github.com/jgm/pandoc/issues/4697), they cannot be rendered in odt or in docx conversion** with a custom *list* style, but only with a custom *paragraph* style; but with ordered lists, paragraph style customization is of little use, because, among other things, *paragraph* syle indents are overrided by *list* style indents (so you will always get the indents set in the default list style, regardless of the level/indentation of the "parent" section).
+As for ordered lists (like `a) ... b) ...`), you may 'use' them even without the `crossref-ordered-list` filter, but please keep in mind that, **because of a [pandoc bug/issue](https://github.com/jgm/pandoc/issues/4697), they cannot be rendered in odt or in docx conversion** with a custom *list* style, but only with a custom *paragraph* style; but with ordered lists, paragraph style customization is of little use, because, among other things, *paragraph* syle indents are overrided by *list* style indents (so you will always get the indents set in the default list style, regardless of the level/indentation of the "parent" section).
 
 In other words, you cannot customize standard ordered list styles in docx and odt; this is the reason why it is preferrable to render them as "native" pandoc-crossref lists (so you can even reference them, as explained in the [Basics section](#ordered-lists))
