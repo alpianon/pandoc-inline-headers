@@ -82,59 +82,17 @@ I'm a section without header
 
 <span id=ordered_lists>As for ordered lists</span>, if you use crossref-ordered-list filter *before* pandoc-crossref and pandoc-inline-headers, they can be rendered and referenced through pandoc-crossref.
 
-Here is an example of the code (please note the use of `sectionsDepth` to choose at which level ordered list numbers/letters have to be rendered without the parent section number(s) - i.e. `a. item` instead of `1.1.a. item` - and note that, when refencing ordered list items, parent section numbers are always included, regardless of the `sectionsDepth` value, as it should be):
+If you want to reference an ordered list item, you can just use the automatically created identifier (`#PARENT_SECTION_ID:ITEM_NUMBER`, f.e. `#sec:my_section:a`), but, if you want a **custom identifier that does not change** if you change the position of the list item or you add other items), you can set it with a syntax like
 
 ```markdown
----
-numberSections: true
-sectionsDepth: 2
-secHeaderDelim: ".&#9;"
-inlineHeaderLevel: 2
----
-
-# Main Section Z
-
-dummy text
-
-## Subsection X {#sec:h2}
-
-dummy text
-
-a. dummy text
-b. dummy text
-
-## Subsection Y
-
-ref to @sec:h2:b
-
-# Main Section W
-
-dummy text
-
-i) dummy text
-ii) dummy text
+a. {#sec:my_custom_id} item text.
 ```
 
-and here is the corresponding output:
+Here is an example of the code with html preview:
 
->**1.	Main Section Z**
->
->dummy text
->
->1.1.	*Subsection X.* dummy text
->
->a.	dummy text
->b.	dummy text
->
->*1.2. Subsection Y.* ref to sec. 1.1.b
->
->**2. Main Section W**
->
->dummy text
->
->2.i.	dummy text
->
->2.ii.	dummy text
+![](examples/img/inline-headers-orderedlists-screenshot.png)
+
+Please note the use of `sectionsDepth` to choose at which level ordered list numbers/letters have to be rendered without the parent section number(s) - i.e. `a. item` instead of `1.1.a. item` - and also note that, when refencing ordered list items, parent section numbers are always included, regardless of the `sectionsDepth` value (exactly as one may expect).
 
 #### 2.1.3. Markdown Preview in Editor
 
