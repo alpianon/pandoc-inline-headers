@@ -1,0 +1,3 @@
+build/*
+dist/*
+pandoc_inline_headers.egg-info/*
