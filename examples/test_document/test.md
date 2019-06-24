@@ -17,20 +17,20 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. <!-- ignored comment -->
 <!-- ignored comment -->
 
-### {#sec:mysec}
+### {#sec:my_sec}
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
-### {#sec:myothersec}
+### {#sec:my_other_sec}
 
 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
 Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 
-a. Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+a. {#sec:my_custom_subsec} Lorem ipsum dolor sit amet, consectetur adipiscing elit,
 b. sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
-Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat (ref: @sec:myothersec:a).
+Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat (cross-references: @sec:my_sec, @sec:my_custom_subsec and @sec:my_other_sec:b).
 
 ## Socrates is human
 
