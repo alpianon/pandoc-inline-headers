@@ -66,7 +66,11 @@ def action(elem, doc):
     sectionsDepth = doc.get_metadata('sectionsDepth')
     sectionsDepth = int(sectionsDepth) if sectionsDepth else 0
     secHeaderDelim = doc.get_metadata('secHeaderDelim')
+    inlineHeaderLevel = doc.get_metadata('inlineHeaderLevel')
+    crossrefOrderedList = doc.get_metadata('crossrefOrderedList')
     if not numberSections:
+        return None
+    if not inlineHeaderLevel and not crossrefOrderedList:
         return None
     if isinstance(elem, pf.Header):
         curlevel = elem.level
