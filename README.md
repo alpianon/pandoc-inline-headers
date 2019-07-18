@@ -57,7 +57,7 @@ inlineHeaderLevel: 2
 
 The first four variables are relative to the `pandoc-crossref` filter: we activate section numbering, automatic creation of reference links, third level section depth, and a section header number delimiter (period followed by tab) that will be useful when converting to docx or odt formats (note that the 'tab' character must be written as the corresponding html character code -- `&#9;` -- otherwise it is ignored by `pandoc-crossref`).
 
-The last variable is the one that 'activates' `inline-section-headers`. It means that all headers, whose level is 2 or higher, will be rendered as inline headers.
+The last variable is the one that 'activates' `inline-section-headers`. It means that all headers, whose level is 2 or higher, will be rendered as inline headers. Such parameter automatically activates also the `crossref-ordered-list` filter (see below), that can be activated also (if for some reason you do not want inline section headers but you do want ordered lists converted to `pandoc-crossref` sections) by setting `crossrefOrderedList: true`.
 
 Of course you can choose level 3, 4, etc. as inlineHeaderLevel. Instead, putting values below 2 will not produce any effect -- so first level headers cannot be rendered as inline headers (this feature may be added in the future).
 

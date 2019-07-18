@@ -98,7 +98,11 @@ by ``pandoc-crossref``).
 
 The last variable is the one that ‘activates’
 ``inline-section-headers``. It means that all headers, whose level is 2
-or higher, will be rendered as inline headers.
+or higher, will be rendered as inline headers. Such parameter
+automatically activates also the ``crossref-ordered-list`` filter
+(see below), that can be activated also (if for some reason you do not
+want inline section headers but you do want ordered lists converted to
+``pandoc-crossref`` sections) by setting ``crossrefOrderedList: true``.
 
 Of course you can choose level 3, 4, etc. as inlineHeaderLevel. Instead,
 putting values below 2 will not produce any effect – so first level
