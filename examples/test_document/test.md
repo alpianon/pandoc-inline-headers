@@ -6,6 +6,8 @@ secHeaderDelim: ".&#9;"
 inlineHeaderLevel: 2
 ---
 
+[example link]: http://www.example.com
+
 # Whereas {#sec:whereas}
 
 ## All humans are mortals
@@ -27,8 +29,8 @@ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliqu
 
 Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 
-a. {#sec:my_custom_subsec} Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-b. sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+a. Custom Subsection {#sec:my_custom_subsec} Lorem ipsum dolor sit amet, [example link] consectetur **adipiscing** elit,
+b. sed do eiusmod tempor incididunt [example link] ut labore et dolore magna aliqua.
 
 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat (cross-references: @sec:my_sec, @sec:my_custom_subsec and @sec:my_other_sec:b).
 

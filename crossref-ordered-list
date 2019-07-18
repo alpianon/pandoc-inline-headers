@@ -1,4 +1,18 @@
 #!/usr/bin/python3
+#SPDX-License-Identifier: GPL-3.0-only
+#
+# Copyright (C) 2019 Alberto Pianon <pianon@array.eu>
+#
+# This program is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation, version 3.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
 
 import panflute as pf
 
@@ -52,7 +66,11 @@ def action(elem, doc):
     sectionsDepth = doc.get_metadata('sectionsDepth')
     sectionsDepth = int(sectionsDepth) if sectionsDepth else 0
     secHeaderDelim = doc.get_metadata('secHeaderDelim')
+    inlineHeaderLevel = doc.get_metadata('inlineHeaderLevel')
+    crossrefOrderedList = doc.get_metadata('crossrefOrderedList')
     if not numberSections:
+        return None
+    if not inlineHeaderLevel and not crossrefOrderedList:
         return None
     if isinstance(elem, pf.Header):
         curlevel = elem.level
@@ -64,59 +82,82 @@ def action(elem, doc):
         format_number = number_formats[ordered_list.style]
         for idx, list_item in enumerate(ordered_list.content):
             number = format_number(idx+1)
-            if list_item.content:
-                list_item_text = pf.stringify(list_item)
-                r = re.search("\{.*\}", list_item_text)
-                metadata = r[0] if r else None
-            else:
-                list_item_text = ""
-                metadata = None
-            if metadata:
+            metadata_start_el_idx = None
+            metadata_end_el_idx = None
+            if list_item.content and list_item.content[0].content:
+                # list item content consists of a 'Plain' object containing in
+                # turn the objects constituting the "actual" content
+
+                # search for metadata within curly brackets
+                content_length = len(list_item.content[0].content)
+                for el_idx, el in enumerate(list_item.content[0].content):
+                    if isinstance(el, pf.Str):
+                        if el.text.startswith('{'):
+                            metadata_start_el_idx = el_idx
+                        if el.text.endswith('}'):
+                            metadata_end_el_idx = el_idx
+            if (
+                    metadata_start_el_idx is not None
+                    and
+                    metadata_end_el_idx is not None
+                    and
+                    metadata_start_el_idx <= metadata_end_el_idx
+            ):
+                # 1) create Header object
+                tmp_span = pf.Span()
+                for m in range(metadata_end_el_idx + 1):
+                    tmp_span.content.append(
+                        list_item.content[0].content[m])
+                header_str = "{} {} {}\n".format(
+                    "#" * (curlevel+1),
+                    (
+                        number + (
+                            secHeaderDelim
+                            if metadata_start_el_idx > 0
+                            else "")
+                        if(curlevel >= sectionsDepth and sectionsDepth !=-1)
+                        else ""
+                    ),
+                    pf.stringify(tmp_span)
+                )
+                metadata = re.search("\{.*\}", header_str)[0]
                 identifier_set_by_user = [
                     i
                     for i in metadata[1:-1].split(" ")
                     if i.startswith("#")
                 ]
-                s = list_item_text.split(metadata)
-                header_text = s[0]
-                para_text = s[1]
-                header_str = "{} {} {} {}".format(
-                    "#" * (curlevel+1),
-                    (
-                        number+(secHeaderDelim if header_text else "")
-                        if (curlevel >= sectionsDepth and sectionsDepth !=-1)
-                        else ""
-                    ),
-                    header_text,
-                    metadata
-                )
                 header = pf.convert_text(header_str)[0]
                 header.attributes['label'] = number
                 if not identifier_set_by_user:
+                    # avoid possible duplicate auto-generated identifiers
                     header.identifier = curid+":"+number
-                c = pf.convert_text(s[1])
-                para = c[0] if c else None
-                # convert text returns a list with 1 element
-                # (or no element of converted text is empty)
+                # 2) create Para object
+                para = pf.Para()
+                if content_length > metadata_end_el_idx + 1:
+                    for p in range(metadata_end_el_idx+2, content_length):
+                        para.content.append(list_item.content[0].content[p])
+
             else:
+                # 1) create Header object
                 header = pf.Header(
                     (
                         pf.Str(number)
-                        if (curlevel >= sectionsDepth and sectionsDepth !=-1)
+                        if(curlevel >= sectionsDepth and sectionsDepth !=-1)
                         else pf.Str("")
                     ),
                     level=curlevel+1,
                     identifier=curid+":"+number,
                     attributes={'label': number},
                 )
-                c = pf.convert_text(list_item_text)
-                para = c[0] if c else None
-                # convert text returns a list with 1 element
-                # (or no element of converted text is empty)
+                # 2) create Para object
+                para = pf.Para()
+                if list_item.content and list_item.content[0].content:
+                    for el in list_item.content[0].content:
+                        para.content.append(el)
 
             elem.parent.content.insert(elem.index+1, header)
             elem = elem.next
-            if para:
+            if para.content:
                 elem.parent.content.insert(elem.index+1, para)
                 elem = elem.next
 
