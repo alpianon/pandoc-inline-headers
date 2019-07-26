@@ -126,7 +126,11 @@ def action(elem, doc):
                     for i in metadata[1:-1].split(" ")
                     if i.startswith("#")
                 ]
-                header = pf.convert_text(header_str)[0]
+                header = pf.convert_text(
+                    header_str.replace("\t", "&#x09;"),
+                    extra_args=["--preserve-tabs",]
+                    # replace and extra_args are necessary to preserve tabs
+                )[0]
                 header.attributes['label'] = number
                 if not identifier_set_by_user:
                     # avoid possible duplicate auto-generated identifiers
