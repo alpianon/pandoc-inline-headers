@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
      name='pandoc-inline-headers',
-     version='0.9.9',
+     version='1.0.0',
      scripts=['crossref-ordered-list', 'pandoc-inline-headers'] ,
      author="Alberto Pianon",
      author_email="pianon@array.eu",
