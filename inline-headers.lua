@@ -8,7 +8,7 @@ local opts = {}
 
 -- {option_name = default}
 local opt_defaults = {
-  inlineHeaderLevel = 0, -- values below 2 do not have any effect
+  inlineHeaderLevel = 0, -- values below 1 do not have any effect
   inlineHeaderDelim = '.',
   inlineHeaderStyle = 'emph',
   inlineHeaderNumStyle = 'plain',
