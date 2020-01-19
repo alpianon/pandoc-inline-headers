@@ -5,9 +5,9 @@ inline-headers.lua is ready to be tested, crossref-ordered-list.lua has yet to b
 This readme needs to be updated, too.
 
 
-# pandoc-inline-headers
+# inline-headers, now rewritten in Lua
 
-Pandoc filter to render headers as inline headers in html, docx and odt conversion, while keeping header ids (and cross-references).
+Pandoc filter to render headers as inline headers in html, docx and odt conversion, while keeping header ids (and cross-references), rewritten in Lua.
 
 Even if it can used as the only pandoc filter, it is intended to be used in cascade after [pandoc-crossref](http://lierdakil.github.io/pandoc-crossref/).
 
@@ -25,21 +25,13 @@ and here is an example of conversion of the same example text to odt:
 
 ## 1. Installation
 
-### 1.1. Python Package
+### 1.1. Lua Package
+
+Simply copy the lua filter in the filters config directory of pandoc
 
 ```bash
-sudo pip3 install pandoc-inline-headers
+cp inline-headers.lua ~/.pandoc/filters
 ```
-
-or, if you want to install as user:
-
-```bash
-pip3 install --user pandoc-inline-headers
-```
-
-but then check if your PATH contains also your user installation directory).
-
-**Note**: pip and pip3 are two different applications; pip3 is for python 3.x and it is the one you need to use to install this package.
 
 ### 1.2. (Highly) Recommended Pandoc Filters
 
