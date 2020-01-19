@@ -133,7 +133,7 @@ local function create_inlineheader(header, delim)
     for i, e in ipairs(header.content) do
       table.insert(inline_header, e)
     end
-    if next(inline_header.content) then --content table is not empty 
+    if inline_header.content and next(inline_header.content) then --content table is not empty 
       if sectionsDepth == -1 or header.level <= sectionsDepth then
         table.insert(inline_header, pandoc.Str(inlineHeaderDelim))
         table.insert(inline_header, pandoc.Space())
@@ -170,7 +170,7 @@ function iterate(document)
            "for inline headers\n" 
        )
   end
-  if inlineHeaderLevel ~= nil and tonumber(inlineHeaderLevel) < 1 then
+  if inlineHeaderLevel == nil or tonumber(inlineHeaderLevel) < 1 then
     return nil -- do nothing
   end
   local i, n = nil, nil
@@ -205,11 +205,21 @@ function iterate(document)
           )
         end
       end
-    elseif block.t == 'Para' and curlevel >= opts[curlevel].inlineHeaderLevel then
-      attr["custom-style"] = 
-        opts[curlevel].inlineHeaderParStyle.." "..
-        tostring(curlevel - opts[curlevel].inlineHeaderLevel+1)
-      doc.blocks[n] = pandoc.Div(block, pandoc.Attr('',{},attr))
+    elseif block.t == 'Para' then
+      local srclevel = curlevel
+      while srclevel > 0 do
+        if opts[scrlevel] then
+          inlineHeaderLevel = opts[scrlevel].inlineHeaderLevel
+          break
+        end
+        srclevel = srclevel - 1
+      end
+      if curlevel >= inlineHeaderLevel then
+        attr["custom-style"] = 
+          opts[curlevel].inlineHeaderParStyle.." "..
+          tostring(curlevel - inlineHeaderLevel+1)
+        doc.blocks[n] = pandoc.Div(block, pandoc.Attr('',{},attr))
+      end
     end
     if i == nil then i = 1 else i = i + 1 end -- damn those petroleum engineers! 
   end
