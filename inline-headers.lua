@@ -133,7 +133,7 @@ local function create_inlineheader(header, delim)
     for i, e in ipairs(header.content) do
       table.insert(inline_header, e)
     end
-    if inline_header.content and next(inline_header.content) then --content table is not empty 
+    if next(inline_header) then -- table is not empty 
       if sectionsDepth == -1 or header.level <= sectionsDepth then
         table.insert(inline_header, pandoc.Str(inlineHeaderDelim))
         table.insert(inline_header, pandoc.Space())
