@@ -1,3 +1,10 @@
+# WORK IN PROGRESS!!!
+
+inline-headers.lua is ready to be tested, crossref-ordered-list.lua has yet to be written!
+
+This readme needs to be updated, too.
+
+
 # pandoc-inline-headers
 
 Pandoc filter to render headers as inline headers in html, docx and odt conversion, while keeping header ids (and cross-references).
