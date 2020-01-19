@@ -206,15 +206,7 @@ function iterate(document)
         end
       end
     elseif block.t == 'Para' then
-      local srclevel = curlevel
-      while srclevel > 0 do
-        if opts[scrlevel] then
-          inlineHeaderLevel = opts[scrlevel].inlineHeaderLevel
-          break
-        end
-        srclevel = srclevel - 1
-      end
-      if curlevel >= inlineHeaderLevel then
+      if curlevel >= opts[curlevel].inlineHeaderLevel then
         attr["custom-style"] = 
           opts[curlevel].inlineHeaderParStyle.." "..
           tostring(curlevel - inlineHeaderLevel+1)
