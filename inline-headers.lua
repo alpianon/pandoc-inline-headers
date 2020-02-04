@@ -123,7 +123,7 @@ local function create_inlineheader(header, delim)
     local sec_title_elem = create_elem(sec_title, inlineHeaderStyle)
     table.insert(inline_header, sec_number_elem)
     
-    if next(sec_title_elem.content) then --content table is not empty
+    if next(sec_title_elem.content) then --> if content table is not empty
       table.insert(inline_header, sec_title_elem)
       table.insert(inline_header, pandoc.Space())
     end
@@ -133,7 +133,7 @@ local function create_inlineheader(header, delim)
     for i, e in ipairs(header.content) do
       table.insert(inline_header, e)
     end
-    if next(inline_header) then -- table is not empty 
+    if next(inline_header) then -->if table inline_header is not empty 
       if sectionsDepth == -1 or header.level <= sectionsDepth then
         table.insert(inline_header, pandoc.Str(inlineHeaderDelim))
         table.insert(inline_header, pandoc.Space())
