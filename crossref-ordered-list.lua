@@ -1,3 +1,8 @@
+--[[
+SPDX-License-Identifier: GPL-3.0-only
+SPDX-FileCopyrightText: 2020 Alberto Pianon <pianon@array.eu>
+]]
+
 local doc
 
 local function int(number)
