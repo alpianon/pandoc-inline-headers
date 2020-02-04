@@ -1,6 +1,6 @@
 # WORK IN PROGRESS!!!
 
-inline-headers.lua is ready to be tested, crossref-ordered-list.lua has yet to be written!
+inline-headers.lua and crossref-ordered-list.lua are ready to be tested
 
 This readme needs to be updated, too.
 
