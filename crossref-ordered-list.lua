@@ -1,14 +1,3 @@
-------FIXME----------------
-local inspect = require('inspect')
-
-function remove_all_metatables(item, path)
-  if path[#path] ~= inspect.METATABLE then return item end
-end
-
-function inspect_no_mt(el)
-  return inspect(el, {process=remove_all_metatables})
-end
----------------------------
 local doc
 
 local function int(number)
