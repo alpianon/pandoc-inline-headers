@@ -157,10 +157,14 @@ function iterate(document)
           content = list_item[1].content
           for el_idx, el in ipairs(content) do
             if el.t == 'Str' then
-              if string.sub(el.text, 1, 1) == '{' then
+              if string.sub(el.text, 1, 1) == '{'
+                and string.sub(el.text, 1, 2) ~= '{{'
+              then
                 metadata_start_el_idx = el_idx
               end
-              if string.sub(el.text, -1, -1) == '}' then
+              if string.sub(el.text, -1, -1) == '}'
+                and string.sub(el.text, -1, -2) ~= '}}'
+              then
                 metadata_end_el_idx = el_idx
               end
             end
