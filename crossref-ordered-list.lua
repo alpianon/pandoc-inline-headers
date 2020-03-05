@@ -143,7 +143,8 @@ function iterate(document)
     elseif block.t == 'OrderedList' then
       local ordered_list = block
       if not is_key_in(ordered_list.style, number_formats) then
-        return nil
+        i = n
+        goto continue
       end
       local format_number = number_formats[ordered_list.style]
       i = n --> we do not put i=i+1 here because i could be nil
@@ -249,7 +250,8 @@ function iterate(document)
     else -- nothing to do, go to the next element
       i = n
     end
-  end
+    ::continue::
+  end  
   return pandoc.Pandoc(doc.blocks, doc.meta)
 end
 
